@@ -21,7 +21,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto createItem(Integer ownerId, ItemDto itemDto) {
-        checkOwner(ownerId);
+        User user = checkOwner(ownerId);
         if (itemDto.getName() == null || itemDto.getName().isBlank()) {
             throw new WrongItemException("Необходимо заполнить поле НАЗВАНИЕ");
         } else if (itemDto.getDescription() == null || itemDto.getDescription().isBlank()) {
@@ -30,7 +30,7 @@ public class ItemServiceImpl implements ItemService {
             throw new WrongItemException("Необходимо заполнить поле СТАТУС");
         } else {
             Item item = ItemMapper.toItem(itemDto);
-            Item newItem = itemStorage.createItem(ownerId, item);
+            Item newItem = itemStorage.createItem(ownerId, item, user);
             return ItemMapper.toItemDto(newItem);
         }
     }
@@ -38,25 +38,31 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto getItem(Integer itemId) {
         Item newItem = itemStorage.getItem(itemId);
+        if (newItem == null) {
+            throw new WrongItemException("Предмет не найден");
+        }
         return ItemMapper.toItemDto(newItem);
     }
 
     @Override
     public List<ItemDto> getAllItems(Integer ownerId) {
-        checkOwner(ownerId);
-        return ItemMapper.toItemDtoList(itemStorage.getAllItems(ownerId));
+        User user = checkOwner(ownerId);
+        return ItemMapper.toItemDtoList(itemStorage.getAllItems(ownerId, user));
     }
 
     @Override
     public ItemDto updateItem(Integer ownerId, Integer itemId, ItemDto itemDto) {
-        checkOwner(ownerId);
+        User user = checkOwner(ownerId);
         Item oldItem = itemStorage.getItem(itemId);
+        if (oldItem == null) {
+            throw new WrongItemException("Предмет не найден");
+        }
         if (oldItem.getOwner().getId().equals(ownerId)) {
             Item item = ItemMapper.toItem(itemDto);
-            Item newItem = itemStorage.updateUser(ownerId, itemId, item);
+            Item newItem = itemStorage.updateItem(ownerId, itemId, item, user);
             return ItemMapper.toItemDto(newItem);
         } else {
-            throw new WrongOwnerException("Пользователь не верный");
+            throw new WrongOwnerException("Пользователь с id {} не найден", ownerId);
         }
     }
 
@@ -65,10 +71,11 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDtoList(itemStorage.getItems(text));
     }
 
-    private void checkOwner(Integer ownerId) {
+    private User checkOwner(Integer ownerId) {
         User user = userStorage.getUser(ownerId);
         if (user == null) {
-            throw new WrongOwnerException("Пользователь не верный");
+            throw new WrongOwnerException("Пользователь с id {} не найден", ownerId);
         }
+        return user;
     }
 }

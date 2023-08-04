@@ -36,16 +36,12 @@ public class UserStorageImpl implements UserStorage {
     public void updateUser(Integer id, User user) {
         if (users.containsKey(id)) {
             User existsUser = users.get(id);
-
             if (user.getEmail() != null) {
                 existsUser.setEmail(user.getEmail());
             }
-
             if (user.getName() != null) {
                 existsUser.setName(user.getName());
             }
-
-            users.put(id, existsUser);
         }
     }
 

@@ -19,9 +19,8 @@ public class ItemStorageImpl implements ItemStorage {
     private int count = 1;
 
     @Override
-    public Item createItem(Integer ownerId, Item item) {
+    public Item createItem(Integer ownerId, Item item, User user) {
         item.setId(count);
-        User user = userStorage.getUser(ownerId);
         item.setOwner(user);
         items.put(count++, item);
         return item;
@@ -33,8 +32,7 @@ public class ItemStorageImpl implements ItemStorage {
     }
 
     @Override
-    public List<Item> getAllItems(Integer ownerId) {
-        User user = userStorage.getUser(ownerId);
+    public List<Item> getAllItems(Integer ownerId, User user) {
         return items.values().stream()
                 .filter(item -> item.getOwner().equals(user))
                 .collect(Collectors.toList());
@@ -51,8 +49,7 @@ public class ItemStorageImpl implements ItemStorage {
     }
 
     @Override
-    public Item updateUser(Integer ownerId, Integer id, Item item) {
-        User user = userStorage.getUser(ownerId);
+    public Item updateItem(Integer ownerId, Integer id, Item item, User user) {
         Item newItem = items.get(id);
         if (newItem.getOwner().equals(user)) {
             if (item.getDescription() != null && !item.getDescription().isBlank()) {

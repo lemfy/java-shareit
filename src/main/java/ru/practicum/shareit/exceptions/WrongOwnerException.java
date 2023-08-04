@@ -6,5 +6,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public class WrongOwnerException extends RuntimeException {
-    private final String parameter;
+    private final String parameter1;
+    private final Integer parameter2;
 }
