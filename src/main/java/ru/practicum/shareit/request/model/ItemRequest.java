@@ -3,12 +3,15 @@ package ru.practicum.shareit.request.model;
 import lombok.Data;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDate;
+import javax.persistence.Column;
+import java.util.Date;
 
 @Data
 public class ItemRequest {
-    private long id;
+    private Integer id;
     private String description;
+    @Column(name = "user_id")
     private User requestor;
-    private LocalDate created;
+    @Column(name = "date_create")
+    private Date created;
 }

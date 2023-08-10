@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class UserMapper {
 
-    public static User toUserModel(UserDto userDto) {
+    public static User toUser(UserDto userDto) {
         return new User(
                 userDto.getId(),
                 userDto.getName(),

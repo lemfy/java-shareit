@@ -6,7 +6,6 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -14,30 +13,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final String pathId = "/{id}";
 
     @PostMapping()
     public UserDto createUser(@Valid @RequestBody UserDto user) {
         return userService.createUser(user);
     }
 
-    @GetMapping(pathId)
-    public UserDto getUser(@PathVariable Integer id) {
+    @GetMapping("/{id}")
+    public UserDto getUser(@PathVariable("id") Integer id) {
         return userService.getUser(id);
     }
 
-    @GetMapping()
-    public List<UserDto> getAllUsers() {
+    @GetMapping
+    public List<UserDto> getUsers() {
         return userService.getAllUsers();
     }
 
-    @PatchMapping(pathId)
-    public UserDto updateUser(@PathVariable Integer id, @RequestBody @NotNull UserDto user) {
-        return userService.updateUser(id, user);
+    @PatchMapping("/{id}")
+    public UserDto updateUser(@Valid @RequestBody UserDto userDTO, @PathVariable("id") Integer id) {
+        return userService.updateUser(id, userDTO);
     }
 
-    @DeleteMapping(pathId)
-    public void deleteUser(@PathVariable Integer id) {
+    @DeleteMapping("/{id}")
+    public Integer delete(@PathVariable("id") Integer id) {
         userService.deleteUser(id);
+        return id;
     }
 }
