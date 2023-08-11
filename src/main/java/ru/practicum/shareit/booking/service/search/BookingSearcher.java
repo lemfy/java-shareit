@@ -1,19 +1,22 @@
 package ru.practicum.shareit.booking.service.search;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.booking.enums.BookingRequestStatus;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
 public abstract class BookingSearcher {
     BookingSearcher bookingSearcher;
     protected final BookingRepository bookingRepository;
+
     abstract Boolean isCorrectState(BookingRequestStatus status);
+
     abstract List<Booking> findBookings(Integer userId);
 
     public List<Booking> find(BookingRequestStatus status, Integer userId) {
