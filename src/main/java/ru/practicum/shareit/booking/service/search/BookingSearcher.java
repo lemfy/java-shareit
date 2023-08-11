@@ -11,14 +11,10 @@ import ru.practicum.shareit.booking.repository.BookingRepository;
 @RequiredArgsConstructor
 @Slf4j
 public abstract class BookingSearcher {
-
-    public BookingSearcher next;
-
+    BookingSearcher bookingSearcher;
     protected final BookingRepository bookingRepository;
-
-    public abstract Boolean isCorrectState(BookingRequestStatus status);
-
-    public abstract List<Booking> findBookings(Integer userId);
+    abstract Boolean isCorrectState(BookingRequestStatus status);
+    abstract List<Booking> findBookings(Integer userId);
 
     public List<Booking> find(BookingRequestStatus status, Integer userId) {
         log.info("BookingSearcher.find({},{})", status, userId);
@@ -26,16 +22,16 @@ public abstract class BookingSearcher {
             log.info("status {} correct by {}", status, getClass().getSimpleName());
             return findBookings(userId);
         }
-        if (next == null) {
+        if (bookingSearcher == null) {
             return new ArrayList<>();
         }
-        return next.find(status, userId);
+        return bookingSearcher.find(status, userId);
     }
 
     public static BookingSearcher link(BookingSearcher item1, BookingSearcher... item2) {
         BookingSearcher head = item1;
         for (BookingSearcher item : item2) {
-            head.next = item;
+            head.bookingSearcher = item;
             head = item;
         }
         return item1;

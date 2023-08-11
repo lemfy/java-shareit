@@ -8,7 +8,7 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-public class CommentMapper {
+public final class CommentMapper {
 
     public static CommentResponseDto toCommentDto(Comment comment) {
         return CommentResponseDto.builder()
