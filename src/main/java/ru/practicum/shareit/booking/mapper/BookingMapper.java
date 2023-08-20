@@ -26,5 +26,4 @@ public class BookingMapper {
                 .end(bookingRequestDto.getEnd())
                 .build();
     }
-
 }

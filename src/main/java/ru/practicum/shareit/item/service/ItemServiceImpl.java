@@ -1,13 +1,11 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingShortForItem;
 import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exceptions.ItemNotFoundException;
-import ru.practicum.shareit.exceptions.RequestNotFoundException;
 import ru.practicum.shareit.exceptions.UserNotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
@@ -19,8 +17,6 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.request.model.ItemRequest;
-import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -43,18 +39,12 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
-    private final ItemRequestRepository itemRequestRepository;
 
     @Override
     public ItemDto createItem(Integer userId, ItemDto itemDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
         Item item = toItem(itemDto);
-        if (itemDto.getRequestId() != null) {
-            ItemRequest itemRequest = itemRequestRepository.findById(itemDto.getRequestId())
-                    .orElseThrow(() -> new RequestNotFoundException(itemDto.getRequestId()));
-            item.setRequest(itemRequest);
-        }
         item.setOwner(user);
         return toItemDto(itemRepository.save(item));
     }
@@ -74,12 +64,12 @@ public class ItemServiceImpl implements ItemService {
         return oneMoreItem;
     }
 
-    public List<ItemDto> getAllItems(Integer userId, Integer from, Integer size) {
+    public List<ItemDto> getAllItems(Integer userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
-        List<Item> items = itemRepository.findByOwnerOrderByIdAsc(user, PageRequest.of(from / size, size));
+        List<Item> items = itemRepository.findByOwnerOrderByIdAsc(user);
         List<BookingShortForItem> bookings = bookingRepository.findByItemInAndStatus(items, BookingStatus.APPROVED);
-        List<ItemDto> itemsList = items.stream()
+        List<ItemDto> oneMoreItems = items.stream()
                 .map(item -> {
                             ItemDto itemDto = toItemDto(item);
                             itemDto.setLastBooking(findLastBookingForItem(item, bookings));
@@ -89,8 +79,7 @@ public class ItemServiceImpl implements ItemService {
                         }
                 )
                 .collect(Collectors.toList());
-
-        return itemsList;
+        return oneMoreItems;
     }
 
     @Override
@@ -114,17 +103,12 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.deleteById(item.getId());
     }
 
-    @Override
-    public List<ItemDto> searchItems(String text, Integer from, Integer size) {
+    public List<ItemDto> searchItems(String text) {
         if (text.isBlank())
             return Collections.emptyList();
-        return itemRepository.search(text, PageRequest.of(from / size, size))
-                .stream()
-                .map(ItemMapper::toItemDto)
-                .collect(Collectors.toList());
+        return itemRepository.search(text).stream().map(ItemMapper::toItemDto).collect(Collectors.toList());
     }
 
-    @Override
     public CommentResponseDto addComment(Integer userId, Integer itemId, CommentRequestDto text) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));

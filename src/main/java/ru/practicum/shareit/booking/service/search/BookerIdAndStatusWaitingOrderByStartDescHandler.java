@@ -1,7 +1,6 @@
 package ru.practicum.shareit.booking.service.search;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.enums.BookingRequestStatus;
 import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.booking.model.Booking;
@@ -21,9 +20,9 @@ public class BookerIdAndStatusWaitingOrderByStartDescHandler extends BookingSear
     }
 
     @Override
-    public List<Booking> findBookings(Integer userId, Pageable pageable) {
+    public List<Booking> findBookings(Integer userId) {
         log.info("{} {}", getClass().getSimpleName(), userId);
         return bookingRepository.findByBookerIdAndStatusOrderByStartDesc(userId,
-                BookingStatus.WAITING, pageable);
+                BookingStatus.WAITING);
     }
 }
