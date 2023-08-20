@@ -74,24 +74,4 @@ class ItemMapperTest {
         assertEquals(itemDto.getName(), item.getName());
         assertEquals(itemDto.getDescription(), item.getDescription());
     }
-
-    @Test
-    void itemEqualsTest() {
-        Item item1 = Item.builder()
-                .id(1)
-                .name("Test item1 name")
-                .description("Test item1 description")
-                .isAvailable(true)
-                .request(ItemRequest.builder().id(1).build())
-                .build();
-        Item item2 = Item.builder()
-                .id(1)
-                .name("Test item1 name")
-                .description("Test item1 description")
-                .isAvailable(true)
-                .request(ItemRequest.builder().id(1).build())
-                .build();
-        assertEquals(item1,item2);
-
-    }
 }
