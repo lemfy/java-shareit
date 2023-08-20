@@ -16,7 +16,6 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 @RequestMapping(path = "/requests")
 public class ItemRequestController {
     private final ItemRequestService requestService;
@@ -30,7 +29,6 @@ public class ItemRequestController {
     @GetMapping(value = "/{requestId}")
     public ItemRequestResponseDto getItemRequest(@RequestHeader(Variables.USER_ID) Integer userId,
                                                  @PathVariable Integer requestId) {
-        log.warn("1234");
         return requestService.getItemRequest(userId, requestId);
     }
 
