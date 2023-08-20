@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.service.search;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.enums.BookingRequestStatus;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -20,9 +21,9 @@ public class ItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByStartDescHandler ext
     }
 
     @Override
-    public List<Booking> findBookings(Integer userId) {
+    public List<Booking> findBookings(Integer userId, Pageable pageable) {
         LocalDateTime now = LocalDateTime.now();
         log.info("{} {} {}", getClass().getSimpleName(), userId, now);
-        return bookingRepository.findByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(userId, now, now);
+        return bookingRepository.findByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(userId, now, now, pageable);
     }
 }
