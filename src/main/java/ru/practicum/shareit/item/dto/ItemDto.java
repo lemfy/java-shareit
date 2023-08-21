@@ -24,6 +24,7 @@ public class ItemDto {
     private String description;
     @NotNull
     private Boolean available;
+    private Integer requestId;
     private BookingShortForItem lastBooking;
     private BookingShortForItem nextBooking;
     private List<CommentResponseDto> comments;
