@@ -45,7 +45,7 @@ class BookingControllerTest {
     private MockMvc mvc;
     private BookingRequestDto bookingRequestDto;
     private BookingResponseDto bookingResponseDto;
-    private DateTimeFormatter fmt = DateTimeFormatter.ofPattern(Variables.DT_FORMAT);
+    private final DateTimeFormatter fmt = DateTimeFormatter.ofPattern(Variables.DT_FORMAT);
 
     @BeforeEach
     void setUp() {

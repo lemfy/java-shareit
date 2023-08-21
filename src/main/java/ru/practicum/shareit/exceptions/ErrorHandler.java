@@ -12,7 +12,6 @@ import javax.persistence.EntityNotFoundException;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(ValidationException e) {
