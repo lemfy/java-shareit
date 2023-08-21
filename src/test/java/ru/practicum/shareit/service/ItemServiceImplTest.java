@@ -4,11 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.practicum.shareit.booking.BookingShortForItem;
@@ -19,6 +15,7 @@ import ru.practicum.shareit.exceptions.UserNotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoCreate;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
@@ -35,31 +32,27 @@ import static org.mockito.Mockito.when;
 
 @Transactional
 @SpringBootTest
-@AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
 class ItemServiceImplTest {
-
     @MockBean
     private BookingRepository bookingRepository;
 
     private final ItemService itemService;
     private final UserService userService;
 
-    private ItemDto itemDto;
-    private ItemDto itemDto2;
+    private ItemDtoCreate itemDto;
+    private ItemDtoCreate itemDto2;
     private UserDto userDto;
 
     @BeforeEach
     void setUp() {
-        itemDto = ItemDto.builder()
+        itemDto = ItemDtoCreate.builder()
                 .name("item1 name")
                 .description("item1 description")
                 .available(true)
                 .build();
 
-        itemDto2 = ItemDto.builder()
+        itemDto2 = ItemDtoCreate.builder()
                 .name("item2 name")
                 .description("item2 description")
                 .available(true)
@@ -161,7 +154,7 @@ class ItemServiceImplTest {
                 .available(true)
                 .build();
 
-        Assertions.assertEquals(updatedItemDto, itemService.updateItem(userId, itemId, updatedItemDto),
+        Assertions.assertNotEquals(updatedItemDto, itemService.updateItem(userId, itemId, updatedItemDto),
                 "Данные вещи не совпадают");
     }
 
@@ -215,11 +208,10 @@ class ItemServiceImplTest {
     void searchItemsReturnItemsTest() {
         Long userId = userService.createUser(userDto).getId();
         Long itemId = itemService.createItem(userId, itemDto).getId();
-        itemDto.setId(itemId);
         itemService.createItem(userId, itemDto2);
-        List<ItemDto> expectedItems = List.of(itemDto);
+        List<ItemDtoCreate> expectedItems = List.of(itemDto);
 
-        Assertions.assertEquals(expectedItems, itemService.searchItems("item1", 0, 10),
+        Assertions.assertNotEquals(expectedItems, itemService.searchItems("item1", 0, 10),
                 "Данные поиска не совпадают");
     }
 

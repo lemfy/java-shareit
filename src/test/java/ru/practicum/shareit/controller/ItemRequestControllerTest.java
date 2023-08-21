@@ -3,15 +3,13 @@ package ru.practicum.shareit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.Variables;
+import ru.practicum.shareit.request.controller.ItemRequestController;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
 import ru.practicum.shareit.request.service.ItemRequestService;
@@ -28,20 +26,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
-@SpringBootTest
+@WebMvcTest(controllers = ItemRequestController.class)
 class ItemRequestControllerTest {
-
     @MockBean
     private ItemRequestService requestService;
-
     @Autowired
     private ObjectMapper mapper;
-
     @Autowired
     private MockMvc mvc;
-
     private ItemRequestResponseDto itemRequestResponseDto;
     private ItemRequestDto itemRequestDto;
 
@@ -109,5 +101,14 @@ class ItemRequestControllerTest {
                         .header(Variables.USER_ID, "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description", is(itemRequestResponseDto.getDescription())));
+    }
+
+    @Test
+    void createRequestEmpty() throws Exception {
+        mvc.perform(post("/requests")
+                        .header(Variables.USER_ID, 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(new ItemRequestDto())))
+                .andExpect(status().isBadRequest());
     }
 }

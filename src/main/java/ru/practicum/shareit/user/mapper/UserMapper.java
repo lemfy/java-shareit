@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.mapper;
 
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserUpdateDto;
 import ru.practicum.shareit.user.model.User;
 
 public class UserMapper {
@@ -20,7 +21,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static User updateUser(User existingUser, UserDto userDto) {
+    public static User updateUser(User existingUser, UserUpdateDto userDto) {
         User.UserBuilder userBuilder = User.builder()
                 .id(existingUser.getId())
                 .name(userDto.getName() != null ? userDto.getName() : existingUser.getName())

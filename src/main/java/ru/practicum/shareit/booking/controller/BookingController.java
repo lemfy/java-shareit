@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Variables;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/bookings")
@@ -39,9 +41,9 @@ public class BookingController {
 
     @GetMapping
     public List<BookingResponseDto> getAllBookings(@RequestHeader(Variables.USER_ID) Long userId,
-                                                   @RequestParam(defaultValue = "ALL", required = false) String state,
-                                                   @RequestParam(defaultValue = "0", required = false) @PositiveOrZero int  from,
-                                                   @RequestParam(defaultValue = "10", required = false) @Positive int  size) {
+                                                   @RequestParam(defaultValue = "ALL") String state,
+                                                   @RequestParam(defaultValue = "0") @PositiveOrZero int  from,
+                                                   @RequestParam(defaultValue = "10") @Positive int  size) {
         return bookingService.getAllBookings(userId, state, from, size);
     }
 

@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.mapper;
 
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoCreate;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -19,6 +20,14 @@ public class ItemMapper {
     }
 
     public static Item toItem(ItemDto itemDto) {
+        return Item.builder()
+                .name(itemDto.getName())
+                .description(itemDto.getDescription())
+                .isAvailable(itemDto.getAvailable())
+                .build();
+    }
+
+    public static Item toItem123(ItemDtoCreate itemDto) {
         return Item.builder()
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())

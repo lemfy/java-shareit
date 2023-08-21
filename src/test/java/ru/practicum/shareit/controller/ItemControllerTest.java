@@ -3,18 +3,17 @@ package ru.practicum.shareit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.Variables;
+import ru.practicum.shareit.item.controller.ItemController;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -29,20 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
-@SpringBootTest
+@WebMvcTest(controllers = ItemController.class)
 class ItemControllerTest {
-
     @MockBean
     private ItemService itemService;
-
     @Autowired
     private ObjectMapper mapper;
-
     @Autowired
     private MockMvc mvc;
-
     private ItemDto itemDto;
 
     @BeforeEach
@@ -178,5 +171,14 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.authorName", is(commentResponseDto.getAuthorName())))
                 .andExpect(jsonPath("$.text", is(commentResponseDto.getText())))
                 .andExpect(jsonPath("$.created", is(commentResponseDto.getCreated().toString())));
+    }
+
+    @Test
+    void createRequestEmpty() throws Exception {
+        mvc.perform(post("/items")
+                        .header(Variables.USER_ID, 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(new ItemRequestDto())))
+                .andExpect(status().isBadRequest());
     }
 }

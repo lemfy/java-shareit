@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Builder
-@Data
+@Getter
+@Setter
 @ToString
 @AllArgsConstructor
 @RequiredArgsConstructor

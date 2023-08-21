@@ -3,14 +3,14 @@ package ru.practicum.shareit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.shareit.Variables;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.user.controller.UserController;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -26,20 +26,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
-@SpringBootTest
+@WebMvcTest(controllers = UserController.class)
 class UserControllerTest {
-
     @MockBean
     private UserService userService;
-
     @Autowired
     private ObjectMapper mapper;
-
     @Autowired
     private MockMvc mvc;
-
     private UserDto userDto;
 
     @BeforeEach
@@ -117,5 +111,23 @@ class UserControllerTest {
     void removeUser() throws Exception {
         mvc.perform(delete("/users/{userId}", userDto.getId()))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void createRequestWithWrongEmail() throws Exception {
+        UserDto userUpdatedDto = UserDto.builder()
+                .name("updatedUser")
+                .email("updatedUser.com")
+                .build();
+
+        when(userService.updateUser(anyLong(), any()))
+                .thenReturn(userUpdatedDto);
+
+        mvc.perform(post("/users")
+                        .header(Variables.USER_ID, 1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(new ItemRequestDto())))
+
+                .andExpect(status().isBadRequest());
     }
 }
