@@ -16,6 +16,7 @@ import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoCreate;
+import ru.practicum.shareit.item.dto.ItemDtoUpdate;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
@@ -147,8 +148,7 @@ class ItemServiceImplTest {
         Long userId = userService.createUser(userDto).getId();
         Long itemId = itemService.createItem(userId, itemDto).getId();
 
-        ItemDto updatedItemDto = ItemDto.builder()
-                .id(itemId)
+        ItemDtoUpdate updatedItemDto = ItemDtoUpdate.builder()
                 .name("item updated name")
                 .description("item updated description")
                 .available(true)
@@ -163,7 +163,7 @@ class ItemServiceImplTest {
         Long userId = userService.createUser(userDto).getId();
         Long itemId = itemService.createItem(userId, itemDto).getId();
 
-        ItemDto updatedItemDto = ItemDto.builder()
+        ItemDtoUpdate updatedItemDto = ItemDtoUpdate.builder()
                 .description("item updated description")
                 .build();
 
@@ -175,7 +175,7 @@ class ItemServiceImplTest {
     void updateItemNameReturnUpdatedItemTest() {
         Long userId = userService.createUser(userDto).getId();
         Long itemId = itemService.createItem(userId, itemDto).getId();
-        ItemDto updatedItemDto = ItemDto.builder()
+        ItemDtoUpdate updatedItemDto = ItemDtoUpdate.builder()
                 .name("updated name")
                 .build();
 
@@ -186,7 +186,7 @@ class ItemServiceImplTest {
     @Test
     void updateItemWithWrongItemIdReturnItemNotFoundExceptionTest() {
         Long userId = userService.createUser(userDto).getId();
-        ItemDto updatedItemDto = ItemDto.builder()
+        ItemDtoUpdate updatedItemDto = ItemDtoUpdate.builder()
                 .name("updated name")
                 .build();
         assertThrows(ItemNotFoundException.class,
@@ -197,7 +197,7 @@ class ItemServiceImplTest {
     void updateItemWithWrongOwnerIdReturnEntityNotFoundExceptionTest() {
         Long userId = userService.createUser(userDto).getId();
         Long itemId = itemService.createItem(userId, itemDto).getId();
-        ItemDto updatedItemDto = ItemDto.builder()
+        ItemDtoUpdate updatedItemDto = ItemDtoUpdate.builder()
                 .name("updated name")
                 .build();
         assertThrows(EntityNotFoundException.class,

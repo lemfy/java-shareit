@@ -4,16 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Variables;
-import ru.practicum.shareit.item.dto.CommentRequestDto;
-import ru.practicum.shareit.item.dto.CommentResponseDto;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoCreate;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/items")
@@ -42,7 +40,7 @@ public class ItemController {
     @PatchMapping(value = "/{itemId}")
     public ItemDto updateItem(@RequestHeader(Variables.USER_ID) Long userId,
                               @PathVariable Long itemId,
-                              @RequestBody ItemDto itemDto) {
+                              @RequestBody ItemDtoUpdate itemDto) {
         return itemService.updateItem(userId, itemId, itemDto);
     }
 

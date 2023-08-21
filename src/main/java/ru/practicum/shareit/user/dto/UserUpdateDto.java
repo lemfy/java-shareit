@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
@@ -15,5 +16,6 @@ public class UserUpdateDto {
     @NotBlank
     private String name;
     @Email
+    @NotEmpty
     private String email;
 }

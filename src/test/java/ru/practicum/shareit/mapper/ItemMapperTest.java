@@ -2,6 +2,7 @@ package ru.practicum.shareit.mapper;
 
 import org.junit.jupiter.api.Test;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoUpdate;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.model.ItemRequest;
 
@@ -66,7 +67,7 @@ class ItemMapperTest {
 
     @Test
     void toItemTest() {
-        ItemDto itemDto = ItemDto.builder()
+        ItemDtoUpdate itemDto = ItemDtoUpdate.builder()
                 .name("Test item name")
                 .description("Test item description")
                 .build();
@@ -94,5 +95,4 @@ class ItemMapperTest {
         assertEquals(item1,item2);
 
     }
-
 }
