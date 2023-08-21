@@ -7,7 +7,6 @@ import ru.practicum.shareit.Variables;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoCreate;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.constraints.Positive;
@@ -22,7 +21,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto createItem(@RequestHeader(Variables.USER_ID) Long userId,
-                              @RequestBody @Validated ItemDtoCreate itemDto) {
+                              @RequestBody @Validated ItemDto itemDto) {
         return itemService.createItem(userId, itemDto);
     }
 
