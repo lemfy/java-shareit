@@ -15,12 +15,14 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(ValidationException e) {
+        log.debug("Получен статус 500 BAD_REQUEST {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(Exception e) {
+        log.debug("Получен статус 500 BAD_REQUEST {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
@@ -32,6 +34,7 @@ public class ErrorHandler {
     })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleObjectNotFoundException(EntityNotFoundException e) {
+        log.debug("Объект не найден. Получен статус 404 NOT_FOUND {}", e.getMessage());
         return new ErrorResponse(e.getMessage());
     }
 
