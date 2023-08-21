@@ -34,8 +34,8 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDto> getAllItems(@RequestHeader(Variables.USER_ID) Long userId,
-                                     @RequestParam(defaultValue = "0", required = false) @PositiveOrZero int  from,
-                                     @RequestParam(defaultValue = "10", required = false) @Positive int  size) {
+                                     @RequestParam(defaultValue = "0") @PositiveOrZero int  from,
+                                     @RequestParam(defaultValue = "10") @Positive int  size) {
         return itemService.getAllItems(userId, from, size);
     }
 
@@ -54,8 +54,8 @@ public class ItemController {
 
     @GetMapping("search")
     public List<ItemDto> searchItems(@RequestParam String text,
-                                     @RequestParam(defaultValue = "0", required = false) @PositiveOrZero int  from,
-                                     @RequestParam(defaultValue = "10", required = false) @Positive int  size) {
+                                     @RequestParam(defaultValue = "0") @PositiveOrZero int  from,
+                                     @RequestParam(defaultValue = "10") @Positive int  size) {
         return itemService.searchItems(text, from, size);
     }
 

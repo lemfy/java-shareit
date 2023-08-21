@@ -8,7 +8,8 @@ import ru.practicum.shareit.user.model.User;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @ToString
 @Builder
 @AllArgsConstructor
