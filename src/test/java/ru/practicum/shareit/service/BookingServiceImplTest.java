@@ -16,6 +16,7 @@ import ru.practicum.shareit.exceptions.ItemNotFoundException;
 import ru.practicum.shareit.exceptions.UserNotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoCreate;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -41,7 +42,7 @@ class BookingServiceImplTest {
     private final UserService userService;
     private final ItemService itemService;
 
-    private ItemDto itemDto;
+    private ItemDtoCreate itemDto;
     private UserDto userDto;
     private Long ownerId;
     private Long bookerId;
@@ -52,7 +53,7 @@ class BookingServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        itemDto = ItemDto.builder()
+        itemDto = ItemDtoCreate.builder()
                 .name("item1 name")
                 .description("item1 description")
                 .available(true)

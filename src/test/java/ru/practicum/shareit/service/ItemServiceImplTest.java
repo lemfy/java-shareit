@@ -15,6 +15,7 @@ import ru.practicum.shareit.exceptions.UserNotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoCreate;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.service.UserService;
@@ -39,19 +40,19 @@ class ItemServiceImplTest {
     private final ItemService itemService;
     private final UserService userService;
 
-    private ItemDto itemDto;
-    private ItemDto itemDto2;
+    private ItemDtoCreate itemDto;
+    private ItemDtoCreate itemDto2;
     private UserDto userDto;
 
     @BeforeEach
     void setUp() {
-        itemDto = ItemDto.builder()
+        itemDto = ItemDtoCreate.builder()
                 .name("item1 name")
                 .description("item1 description")
                 .available(true)
                 .build();
 
-        itemDto2 = ItemDto.builder()
+        itemDto2 = ItemDtoCreate.builder()
                 .name("item2 name")
                 .description("item2 description")
                 .available(true)
@@ -207,9 +208,8 @@ class ItemServiceImplTest {
     void searchItemsReturnItemsTest() {
         Long userId = userService.createUser(userDto).getId();
         Long itemId = itemService.createItem(userId, itemDto).getId();
-        itemDto.setId(itemId);
         itemService.createItem(userId, itemDto2);
-        List<ItemDto> expectedItems = List.of(itemDto);
+        List<ItemDtoCreate> expectedItems = List.of(itemDto);
 
         Assertions.assertNotEquals(expectedItems, itemService.searchItems("item1", 0, 10),
                 "Данные поиска не совпадают");
