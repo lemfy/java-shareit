@@ -14,10 +14,8 @@ import java.util.List;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest {
-
     @Autowired
     private TestEntityManager em;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -56,5 +54,4 @@ class UserRepositoryTest {
         Assertions.assertEquals(user1.getName(), users.get(0).getName());
         Assertions.assertEquals(user2.getName(), users.get(1).getName());
     }
-
 }

@@ -18,9 +18,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -53,7 +51,7 @@ public class BookingRepositoryTest {
     void findByBooker_Id() {
         List<Booking> res = bookingRepository.findByBookerIdOrderByStartDesc(user2.getId(), Pageable.unpaged());
         assertNotNull(res);
-        assertTrue(!res.isEmpty());
+        assertFalse(res.isEmpty());
         assertEquals(booking, res.get(0));
     }
 
@@ -61,7 +59,7 @@ public class BookingRepositoryTest {
     void findByItemOwnerIdOrderByStartDesc() {
         List<Booking> res = bookingRepository.findByItemOwnerIdOrderByStartDesc(user1.getId(), Pageable.unpaged());
         assertNotNull(res);
-        assertTrue(!res.isEmpty());
+        assertFalse(res.isEmpty());
         assertEquals(booking, res.get(0));
     }
 
@@ -70,7 +68,7 @@ public class BookingRepositoryTest {
         LocalDateTime date = LocalDateTime.now().plusDays(2);
         List<Booking> res = bookingRepository.findByBookerIdAndEndIsBeforeOrderByStartDesc(user2.getId(), date, Pageable.unpaged());
         assertNotNull(res);
-        assertTrue(!res.isEmpty());
+        assertFalse(res.isEmpty());
         assertEquals(booking, res.get(0));
     }
 
@@ -79,7 +77,7 @@ public class BookingRepositoryTest {
         LocalDateTime date = LocalDateTime.now().minusHours(1);
         List<Booking> res = bookingRepository.findByBookerIdAndStartIsAfterOrderByStartDesc(user2.getId(), date, Pageable.unpaged());
         assertNotNull(res);
-        assertTrue(!res.isEmpty());
+        assertFalse(res.isEmpty());
         assertEquals(booking, res.get(0));
     }
 
@@ -88,7 +86,7 @@ public class BookingRepositoryTest {
         LocalDateTime date = LocalDateTime.now().plusHours(1);
         List<Booking> res = bookingRepository.findByBookerIdAndStartIsBeforeAndEndIsAfterOrderByIdAsc(user2.getId(), date, date, Pageable.unpaged());
         assertNotNull(res);
-        assertTrue(!res.isEmpty());
+        assertFalse(res.isEmpty());
         assertEquals(booking, res.get(0));
     }
 
@@ -96,7 +94,7 @@ public class BookingRepositoryTest {
     void findByBookerIdAndStatusOrderByStartDesc() {
         List<Booking> res = bookingRepository.findByBookerIdAndStatusOrderByStartDesc(user2.getId(), BookingStatus.APPROVED, Pageable.unpaged());
         assertNotNull(res);
-        assertTrue(!res.isEmpty());
+        assertFalse(res.isEmpty());
         assertEquals(booking, res.get(0));
     }
 
@@ -105,7 +103,7 @@ public class BookingRepositoryTest {
         LocalDateTime date = LocalDateTime.now().plusDays(2);
         List<Booking> res = bookingRepository.findByItemOwnerIdAndEndIsBeforeOrderByStartDesc(user1.getId(), date, Pageable.unpaged());
         assertNotNull(res);
-        assertTrue(!res.isEmpty());
+        assertFalse(res.isEmpty());
         assertEquals(booking, res.get(0));
     }
 
@@ -114,7 +112,7 @@ public class BookingRepositoryTest {
         LocalDateTime date = LocalDateTime.now().minusDays(2);
         List<Booking> res = bookingRepository.findByItemOwnerIdAndStartIsAfterOrderByStartDesc(user1.getId(), date, Pageable.unpaged());
         assertNotNull(res);
-        assertTrue(!res.isEmpty());
+        assertFalse(res.isEmpty());
         assertEquals(booking, res.get(0));
     }
 
@@ -123,7 +121,7 @@ public class BookingRepositoryTest {
         LocalDateTime date = LocalDateTime.now().plusHours(2);
         List<Booking> res = bookingRepository.findByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(user1.getId(), date, date, Pageable.unpaged());
         assertNotNull(res);
-        assertTrue(!res.isEmpty());
+        assertFalse(res.isEmpty());
         assertEquals(booking, res.get(0));
     }
 
@@ -131,8 +129,7 @@ public class BookingRepositoryTest {
     void findByItemOwnerIdAndStatusOrderByStartDesc() {
         List<Booking> res = bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(user1.getId(), BookingStatus.APPROVED, Pageable.unpaged());
         assertNotNull(res);
-        assertTrue(!res.isEmpty());
+        assertFalse(res.isEmpty());
         assertEquals(booking, res.get(0));
     }
-
 }

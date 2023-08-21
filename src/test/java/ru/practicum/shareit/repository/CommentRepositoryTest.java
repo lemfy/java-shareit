@@ -15,14 +15,11 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CommentRepositoryTest {
-
     @Autowired
     private ItemRepository itemRepository;
     @Autowired
@@ -30,19 +27,15 @@ public class CommentRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User user1;
-    private User user2;
     private Item item;
     private Comment comment;
 
-    private LocalDateTime now;
-
     @BeforeEach
     void setUp() {
-        user1 = userRepository.save(new User(-1L, "name1", "mail1@yandex.com"));
-        user2 = userRepository.save(new User(-1L, "name2", "mail2@yandex.com"));
+        User user1 = userRepository.save(new User(-1L, "name1", "mail1@yandex.com"));
+        User user2 = userRepository.save(new User(-1L, "name2", "mail2@yandex.com"));
         item = itemRepository.save(new Item(-1L, "itemName", "description", true, user1, null));
-        now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
         comment = commentRepository.save(new Comment(-1L, "comment", item, user2, now));
     }
 
@@ -50,8 +43,7 @@ public class CommentRepositoryTest {
     void findByItem() {
         List<Comment> res = commentRepository.findByItem(item);
         assertNotNull(res);
-        assertTrue(res.size() > 0);
+        assertFalse(res.isEmpty());
         assertEquals(comment, res.get(0));
     }
-
 }
