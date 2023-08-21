@@ -1,15 +1,18 @@
 package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.enums.BookingRequestStatus;
-import ru.practicum.shareit.booking.service.search.*;
-import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
+import ru.practicum.shareit.booking.enums.BookingRequestStatus;
+import ru.practicum.shareit.booking.enums.BookingStatus;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.booking.service.search.*;
 import ru.practicum.shareit.exceptions.ItemNotFoundException;
 import ru.practicum.shareit.exceptions.UserNotFoundException;
 import ru.practicum.shareit.exceptions.ValidationException;
@@ -29,7 +32,6 @@ import static ru.practicum.shareit.booking.mapper.BookingMapper.toBookingDto;
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
-
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
@@ -87,9 +89,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getAllBookings(Integer userId, String state) {
+    public List<BookingResponseDto> getAllBookings(Integer userId, String state, Integer from, Integer size) {
+        if (from < 0 || size <= 0) {
+            throw new ValidationException("неверные значения from/size");
+        }
         userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
+        Pageable pageable = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"));
         List<Booking> bookings = BookingSearcher.link(
                 new BookerIdAndEndIsBeforeOrderByStartDescHandler(bookingRepository),
                 new BookerIdAndStartIsAfterOrderByStartDescHandler(bookingRepository),
@@ -97,7 +103,7 @@ public class BookingServiceImpl implements BookingService {
                 new BookerIdAndStatusRejectedOrderByStartDescHandler(bookingRepository),
                 new BookerIdAndStatusWaitingOrderByStartDescHandler(bookingRepository),
                 new BookerIdOrderByStartDescHandler(bookingRepository)
-        ).find(BookingRequestStatus.getStatus(state), userId);
+        ).find(BookingRequestStatus.getStatus(state), userId, pageable);
 
         return bookings
                 .stream()
@@ -106,9 +112,13 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingResponseDto> getAllBookingsForOwner(Integer userId, String state) {
+    public List<BookingResponseDto> getAllBookingsForOwner(Integer userId, String state, Integer from, Integer size) {
+        if (from < 0 || size <= 0) {
+            throw new ValidationException("неверные значения from/size");
+        }
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
+        Pageable pageable = PageRequest.of(from / size, size, Sort.by(Sort.Direction.DESC, "start"));
         List<Booking> bookings = BookingSearcher.link(
                 new ItemOwnerIdAndEndIsBeforeOrderByStartDescHandler(bookingRepository),
                 new ItemOwnerIdAndStartIsAfterOrderByStartDescHandler(bookingRepository),
@@ -116,13 +126,11 @@ public class BookingServiceImpl implements BookingService {
                 new ItemOwnerIdAndStatusWaitingOrderByStartDescHandler(bookingRepository),
                 new ItemOwnerIdAndStatusRejectedOrderByStartDescHandler(bookingRepository),
                 new ItemOwnerIdOrderByStartDescHandler(bookingRepository)
-        ).find(BookingRequestStatus.getStatus(state), userId);
+        ).find(BookingRequestStatus.getStatus(state), userId, pageable);
 
         return bookings
                 .stream()
                 .map(BookingMapper::toBookingDto)
                 .collect(Collectors.toList());
     }
-
 }
-
