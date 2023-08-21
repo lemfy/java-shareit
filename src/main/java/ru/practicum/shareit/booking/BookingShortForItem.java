@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class BookingShortForItem {
-    private Integer id;
-    private Integer bookerId;
-    private Integer itemId;
+    private Long id;
+    private Long bookerId;
+    private Long itemId;
     private LocalDateTime start;
     private LocalDateTime end;
 }
