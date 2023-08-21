@@ -2,7 +2,7 @@ package ru.practicum.shareit.exceptions;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ErrorHandlerTest {
     private final ErrorHandler handler = new ErrorHandler();
@@ -25,7 +25,7 @@ class ErrorHandlerTest {
     void handleObjectNotFoundException() {
         ItemNotFoundException ex = new ItemNotFoundException(1);
         ErrorResponse response = handler.handleObjectNotFoundException(ex);
-        assertEquals("Вещь не найдена: 1 ", response.getError());
+        assertEquals("Вещь с id [1] не найдена!", response.getError());
     }
 
     @Test

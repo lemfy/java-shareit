@@ -35,10 +35,7 @@ import static org.mockito.Mockito.when;
 
 @Transactional
 @SpringBootTest
-@AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
 class ItemServiceImplTest {
     @MockBean
     private BookingRepository bookingRepository;
