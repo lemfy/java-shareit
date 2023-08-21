@@ -25,7 +25,7 @@ class ErrorHandlerTest {
     void handleObjectNotFoundException() {
         ItemNotFoundException ex = new ItemNotFoundException(1);
         ErrorResponse response = handler.handleObjectNotFoundException(ex);
-        assertEquals("Вещь с id [1] не найдена!", response.getError());
+        assertEquals("Вещь не найдена: 1 ", response.getError());
     }
 
     @Test
