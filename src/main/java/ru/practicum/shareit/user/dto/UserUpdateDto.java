@@ -13,9 +13,7 @@ import javax.validation.constraints.NotEmpty;
 @RequiredArgsConstructor
 public class UserUpdateDto {
     private Long id;
-    @NotBlank
     private String name;
     @Email
-    @NotEmpty
     private String email;
 }

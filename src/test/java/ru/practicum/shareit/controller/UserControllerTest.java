@@ -119,7 +119,6 @@ class UserControllerTest {
                 .name("updatedUser")
                 .email("updatedUser.com")
                 .build();
-
         when(userService.updateUser(anyLong(), any()))
                 .thenReturn(userUpdatedDto);
 
