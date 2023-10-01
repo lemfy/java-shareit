@@ -22,7 +22,7 @@ import java.util.Objects;
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @Column(name = "start_date", nullable = false)
     private LocalDateTime start;
     @Column(name = "end_date", nullable = false)
