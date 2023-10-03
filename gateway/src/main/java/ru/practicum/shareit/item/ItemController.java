@@ -10,6 +10,7 @@ import ru.practicum.shareit.Variables;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
@@ -23,7 +24,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<Object> createItem(@RequestHeader(Variables.USER_ID) Long userId,
-                                             @RequestBody @Validated ItemDto itemDto) {
+                                             @RequestBody @Valid ItemDto itemDto) {
         log.info("Add new item {}, userId={}", itemDto, userId);
         return itemClient.createItem(userId, itemDto);
     }
@@ -70,7 +71,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> addComment(@RequestHeader(Variables.USER_ID) Long userId,
                                              @PathVariable Long itemId,
-                                             @RequestBody @Validated CommentRequestDto text) {
+                                             @RequestBody @Valid CommentRequestDto text) {
         log.info("Add comment={} to itemId={} by userId={}", text, itemId, userId);
         return itemClient.addComment(userId, itemId, text);
     }
