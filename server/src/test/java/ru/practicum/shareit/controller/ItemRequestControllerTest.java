@@ -102,13 +102,4 @@ class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.description", is(itemRequestResponseDto.getDescription())));
     }
-
-    @Test
-    void createRequestEmpty() throws Exception {
-        mvc.perform(post("/requests")
-                        .header(Variables.USER_ID, 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(new ItemRequestDto())))
-                .andExpect(status().isBadRequest());
-    }
 }

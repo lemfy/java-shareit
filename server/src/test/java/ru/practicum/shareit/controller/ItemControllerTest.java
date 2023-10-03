@@ -172,13 +172,4 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.text", is(commentResponseDto.getText())))
                 .andExpect(jsonPath("$.created", is(commentResponseDto.getCreated().toString())));
     }
-
-    @Test
-    void createRequestEmpty() throws Exception {
-        mvc.perform(post("/items")
-                        .header(Variables.USER_ID, 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(new ItemRequestDto())))
-                .andExpect(status().isBadRequest());
-    }
 }

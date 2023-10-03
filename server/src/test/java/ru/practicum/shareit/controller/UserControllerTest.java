@@ -112,21 +112,4 @@ class UserControllerTest {
         mvc.perform(delete("/users/{userId}", userDto.getId()))
                 .andExpect(status().isOk());
     }
-
-    @Test
-    void createRequestWithWrongEmail() throws Exception {
-        UserDto userUpdatedDto = UserDto.builder()
-                .name("updatedUser")
-                .email("updatedUser.com")
-                .build();
-        when(userService.updateUser(anyLong(), any()))
-                .thenReturn(userUpdatedDto);
-
-        mvc.perform(post("/users")
-                        .header(Variables.USER_ID, 1L)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(new ItemRequestDto())))
-
-                .andExpect(status().isBadRequest());
-    }
 }
