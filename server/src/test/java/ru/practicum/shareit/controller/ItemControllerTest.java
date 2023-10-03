@@ -13,7 +13,6 @@ import ru.practicum.shareit.item.controller.ItemController;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
