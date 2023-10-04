@@ -11,32 +11,32 @@ import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 @Slf4j
-public class ErrorHandler extends RuntimeException {
+public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Throwable e) {
-        log.error("Exception", e);
+        log.error("Exception", e.getStackTrace());
         return new ErrorResponse("Произошла непредвиденная ошибка");
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("Ошибка валидации полей");
+        log.error("Ошибка валидации полей", e.getStackTrace());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(ConstraintViolationException e) {
-        log.error("Ошибка валидации полей контроллера");
+        log.error("Ошибка валидации полей контроллера", e.getStackTrace());
         return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(ValidationException e) {
-        log.error("Ошибка ручной валидации");
+        log.error("Ошибка ручной валидации", e.getStackTrace());
         return new ErrorResponse(e.getMessage());
     }
 }
